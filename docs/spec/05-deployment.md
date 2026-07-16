@@ -66,6 +66,7 @@ Servicios disponibles tras el arranque:
 | 005 | `login_backgrounds` |
 | 006 | Reglas de negocio de configuración |
 | 007 | Producto terminado y registro de producción (`item_type`, `production_runs`, `recipes.produces_supply_item_id`/`shelf_life_days`) |
+| 008 | Lista de preparación persistida (`production_run_items`: snapshot por ingrediente con unidad, ubicación y desglose FIFO de lotes) |
 
 Los ENUMs se crean en `sql/init.sql` en el primer boot de PostgreSQL; el ORM los referencia con
 `create_type=False` para evitar duplicados (ver Constitución, Art. IV).
@@ -88,7 +89,7 @@ variables de entorno endurecidas). Diferencias frente al entorno local:
 - [ ] STAFF que intenta crear categoría recibe 403 (HU-01 SC-03) — RBAC operativo.
 - [ ] Consumo que cruza el mínimo dispara toast en el dashboard (HU-02 + HU-14) — WebSocket vivo.
 - [ ] Export `GET /reports/export?format=csv` descarga el CSV desnormalizado (HU-12).
-- [ ] `alembic current` coincide con la última revisión (007).
+- [ ] `alembic current` coincide con la última revisión (008).
 
 ## 7. Operación y respaldo (notas)
 

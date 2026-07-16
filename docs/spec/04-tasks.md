@@ -137,7 +137,7 @@
 
 | ID | Tarea | Fase | HU | Depende | Estado |
 |---|---|---|---|---|---|
-| T-DEP-01 | Migraciones Alembic (001→006) aplicables en primer boot | Despliegue | — | T-DIS-02 | ✅ |
+| T-DEP-01 | Migraciones Alembic (001→008) aplicables en primer boot | Despliegue | — | T-DIS-02 | ✅ |
 | T-DEP-02 | Seed idempotente de admin + datos demo | Despliegue | — | T-DEP-01 | ✅ |
 | T-DEP-03 | `docker-compose up` levanta los 4 servicios sanos | Despliegue | — | Bloque 6-9 | ✅ |
 | T-DEP-04 | `docker-compose.prod.yml` + variables de entorno de producción | Despliegue | — | T-DEP-03 | ✅ |
@@ -183,6 +183,34 @@
 | T-REF-04 | OLAP: añadir `item_type`, `unit_cost`, `total_cost`, `notes` al export | Impl | HU-12 | — | ✅ |
 | T-REF-05 | Verificación: suite pytest verde + typecheck frontend | Pruebas | — | T-REF-01…04 | ✅ |
 
+## Bloque 15 — Despliegue en producción (Railway vía GitHub)
+
+> El Bloque 11 cubre el despliegue **local/demo** con Docker Compose. Este bloque lleva el sistema
+> a un entorno **público y permanente** en Railway, como 4 servicios (Postgres, Redis, backend,
+> frontend). Decisión de método: **auto-deploy desde GitHub** (cada push a `main` despliega), sin
+> Railway CLI — el repositorio queda además como evidencia del ciclo de vida. Guía operativa
+> detallada en `docs/deployment-railway.md`.
+
+| ID | Tarea | Fase | HU | Depende | Estado |
+|---|---|---|---|---|---|
+| T-RW-01 | `backend/Dockerfile` de producción (gunicorn + workers uvicorn, bind a `$PORT`) | Despliegue | — | T-DEP-04 | ✅ |
+| T-RW-02 | `frontend/Dockerfile` (build standalone, `HOSTNAME=0.0.0.0`, `ARG NEXT_PUBLIC_API_URL`) | Despliegue | — | T-DEP-04 | ✅ |
+| T-RW-03 | `backend/railway.json`: builder DOCKERFILE, `startCommand` (migraciones→seeds→gunicorn), healthcheck `/health` | Despliegue | — | T-RW-01 | ✅ |
+| T-RW-04 | `frontend/railway.json`: builder DOCKERFILE + política de reinicio | Despliegue | — | T-RW-02 | ✅ |
+| T-RW-05 | Redactar guía de despliegue → `deployment-railway.md` | Despliegue | — | T-RW-03, T-RW-04 | ✅ |
+| T-RW-06 | Verificar que `.gitignore` excluye `.env` y secretos antes de publicar (solo `.env.example` rastreado) | Despliegue | — | — | ✅ |
+| T-RW-07 | Publicar el repositorio en GitHub (rama `main`) | Despliegue | — | T-RW-06 | ⬜ |
+| T-RW-08 | Crear proyecto en Railway + plugins PostgreSQL y Redis | Despliegue | — | T-RW-07 | ⬜ |
+| T-RW-09 | Servicio `backend` conectado al repo (Root Directory = `backend`, auto-deploy en push) | Despliegue | — | T-RW-08 | ⬜ |
+| T-RW-10 | Variables del backend: `DATABASE_URL`/`REDIS_URL` por *reference variables*, `SECRET_KEY`, `ENVIRONMENT`, `SUPERADMIN_*` | Despliegue | HU-04 | T-RW-09 | ⬜ |
+| T-RW-11 | Generar dominio público del backend (Networking → Generate Domain) | Despliegue | — | T-RW-10 | ⬜ |
+| T-RW-12 | Servicio `frontend` (Root Directory = `frontend`) + `NEXT_PUBLIC_API_URL`/`INTERNAL_API_URL` + dominio | Despliegue | — | T-RW-11 | ⬜ |
+| T-RW-13 | Cerrar `CORS_ORIGINS` del backend con el dominio real del frontend (redeploy) | Despliegue | — | T-RW-12 | ⬜ |
+| T-RW-14 | Decidir si `seed_demo.py` permanece en el `startCommand` del entorno productivo | Despliegue | — | T-RW-10 | ⬜ |
+| T-RW-15 | Verificar en logs: migraciones `001→008` aplicadas y seeds idempotentes ejecutados | Pruebas | — | T-RW-13 | ⬜ |
+| T-RW-16 | Ejecutar checklist post-despliegue: `/health`, `/docs`, login, categoría 201 (Redis), toast por WebSocket, export CSV | Pruebas | HU-01,04,12,14 | T-RW-15 | ⬜ |
+| T-RW-17 | Registrar la sesión de despliegue en la wiki (`docs/wiki/`) | Transversal | — | T-RW-16 | ⬜ |
+
 ---
 
 ## Resumen de ejecución
@@ -204,6 +232,10 @@
 | 12 Documentación | 3 | 2 | Transversal |
 | 13 Producto terminado (HU-17) | 9 | 9 | Impl→Pruebas |
 | 14 Refinamientos UX/datos | 5 | 5 | Implementación |
-| **Total** | **85** | **84** | — |
+| 15 Despliegue en Railway | 17 | 6 | Despliegue |
+| **Total** | **102** | **90** | — |
 
-> **Pendiente único:** T-DOC-03 (informe final), que consume el resto de artefactos como anexos.
+> **Pendientes:** el Bloque 15 (despliegue en Railway) tiene la preparación hecha (Dockerfiles,
+> `railway.json`, guía, `.gitignore` auditado) y las 11 tareas de ejecución abiertas — se cierran
+> conforme se realiza el despliegue. T-DOC-03 (informe final) queda al final, ya que consume el resto de artefactos como
+> anexos e incluirá la URL pública del sistema desplegado.
