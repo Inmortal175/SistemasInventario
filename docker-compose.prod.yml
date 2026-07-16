@@ -1,0 +1,28 @@
+version: "3.9"
+
+# Override de producción — usar con:
+# docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+
+services:
+  backend:
+    build:
+      target: production
+    command: []   # usa el CMD del Dockerfile (gunicorn)
+    environment:
+      ENVIRONMENT: production
+      LOG_LEVEL: WARNING
+    volumes: []   # sin bind-mount en producción
+
+  frontend:
+    build:
+      target: production
+    command: []
+    volumes: []
+
+  postgres:
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}   # sin default en prod
+    ports: []   # no exponer postgres al host en producción
+
+  redis:
+    ports: []   # no exponer redis al host en producción

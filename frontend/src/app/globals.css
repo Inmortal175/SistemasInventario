@@ -1,0 +1,100 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Paletas del sistema. Cada tono se declara como canales RGB sueltos ("R G B"),
+ * formato que exige el <alpha-value> de Tailwind para que sigan funcionando
+ * clases como bg-brand-50/40.
+ *
+ * El tema activo lo estampa el layout raíz en <html data-theme="…"> leyendo
+ * `theme` de /api/v1/settings. Los slugs deben coincidir con el enum ThemeName
+ * del backend: rosa | chocolate | menta | azul.
+ */
+:root,
+:root[data-theme="rosa"] {
+  color-scheme: light;
+  --brand-50: 255 241 246;
+  --brand-100: 255 228 238;
+  --brand-200: 255 201 221;
+  --brand-300: 255 157 192;
+  --brand-400: 255 107 157;
+  --brand-500: 248 59 126;
+  --brand-600: 224 26 99;
+  --brand-700: 189 15 80;
+  --brand-800: 156 17 71;
+  --brand-900: 130 18 64;
+}
+
+:root[data-theme="chocolate"] {
+  --brand-50: 253 248 243;
+  --brand-100: 247 235 224;
+  --brand-200: 237 211 186;
+  --brand-300: 223 178 140;
+  --brand-400: 186 124 71;
+  --brand-500: 139 90 43;
+  --brand-600: 122 77 36;
+  --brand-700: 101 63 30;
+  --brand-800: 82 51 26;
+  --brand-900: 65 40 21;
+}
+
+:root[data-theme="menta"] {
+  --brand-50: 240 253 248;
+  --brand-100: 217 249 236;
+  --brand-200: 176 240 216;
+  --brand-300: 116 226 189;
+  --brand-400: 52 205 157;
+  --brand-500: 15 157 118;
+  --brand-600: 12 128 98;
+  --brand-700: 11 102 80;
+  --brand-800: 11 81 64;
+  --brand-900: 10 67 53;
+}
+
+:root[data-theme="azul"] {
+  --brand-50: 239 246 255;
+  --brand-100: 219 234 254;
+  --brand-200: 191 219 254;
+  --brand-300: 147 197 253;
+  --brand-400: 96 165 250;
+  --brand-500: 37 99 235;
+  --brand-600: 29 78 216;
+  --brand-700: 30 64 175;
+  --brand-800: 30 58 138;
+  --brand-900: 23 37 84;
+}
+
+body {
+  @apply bg-brand-50/40 text-slate-800 antialiased;
+}
+
+@layer components {
+  .card {
+    @apply rounded-2xl border border-brand-100 bg-white p-6 shadow-sm;
+  }
+
+  .label {
+    @apply mb-1 block text-sm font-medium text-slate-600;
+  }
+
+  .input {
+    @apply w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm
+      text-slate-800 outline-none transition
+      focus:border-brand-400 focus:ring-2 focus:ring-brand-200;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2
+      text-sm font-semibold transition disabled:cursor-not-allowed
+      disabled:opacity-60;
+  }
+
+  .btn-primary {
+    @apply btn bg-brand-500 text-white hover:bg-brand-600;
+  }
+
+  .btn-ghost {
+    @apply btn bg-brand-100 text-brand-700 hover:bg-brand-200;
+  }
+}

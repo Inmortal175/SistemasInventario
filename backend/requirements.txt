@@ -1,0 +1,32 @@
+# ── Web Framework ───────────────────────────────
+fastapi==0.115.5
+uvicorn[standard]==0.32.1
+gunicorn==23.0.0
+
+# ── Base de datos (async) ───────────────────────
+sqlalchemy==2.0.36
+asyncpg==0.30.0
+alembic==1.14.0
+
+# ── Redis ───────────────────────────────────────
+redis[hiredis]==5.2.1
+
+# ── Validación y configuración ──────────────────
+pydantic==2.10.3
+pydantic-settings==2.6.1
+pydantic[email]==2.10.3
+
+# ── Seguridad / JWT ─────────────────────────────
+# python-jose está sin mantener y usa datetime.utcnow() (deprecado, a eliminarse).
+# Se migró a PyJWT (mantenido, timezone-aware) — ver app/core/security.py.
+PyJWT==2.10.1
+# passlib está sin mantener y rompe con bcrypt>=4.1 (falta __about__).
+# Se usa bcrypt directamente en app/core/security.py.
+bcrypt==5.0.0
+python-multipart==0.0.18
+
+# ── Utilidades ──────────────────────────────────
+python-slugify==8.0.4
+# Decodifica la imagen subida: valida que sea real (el content-type es del
+# cliente) y normaliza el logo a un cuadrado 1:1.
+Pillow==11.1.0

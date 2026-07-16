@@ -1,0 +1,8 @@
+/node_modules
+/.next
+/out
+/build
+.pnpm-store
+next-env.d.ts.timestamp
+.env*.local
+*.tsbuildinfo

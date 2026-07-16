@@ -1,0 +1,37 @@
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --cov=app --cov-report=term-missing --cov-fail-under=80"
+
+[tool.coverage.run]
+source = ["app"]
+# SQLAlchemy async ejecuta el driver dentro de un greenlet (`greenlet_spawn`).
+# Sin declararlo, el trazador de coverage deja de registrar líneas en cuanto un
+# servicio hace su primer `await` contra la base: los tests de integración se
+# reportaban muy por debajo de lo que realmente ejercitan.
+concurrency = ["thread", "greenlet"]
+
+[tool.coverage.report]
+exclude_also = [
+    # Las interfaces de repositorio (DIP) son solo firmas de tipo: su cuerpo es
+    # `...` y nunca se ejecuta. Contarlas como no cubiertas es ruido.
+    "class .*\\(Protocol\\):",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "UP", "B", "SIM"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+ignore_missing_imports = true
+plugins = ["pydantic.mypy"]

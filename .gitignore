@@ -1,0 +1,63 @@
+# ── Entorno ─────────────────────────────────────
+.env
+.env.local
+.env.*.local
+
+# ── Python ──────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+coverage.xml
+
+# ── Node / Next.js ──────────────────────────────
+node_modules/
+.next/
+out/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.pnpm-store/
+
+# ── Herramientas locales / temporales ───────────
+# Config y skills locales de Claude Code (no forman parte del producto)
+.claude/
+# Estado del workspace de Obsidian (editor del wiki)
+.obsidian/
+# Notas diarias sueltas de Obsidian en la raíz
+/20??-??-??.md
+# Archivos de bloqueo de Office (Word/Excel)
+~$*
+
+# ── Subidas en runtime (se generan al usar la app; la app crea los dirs) ──
+backend/static/avatars/
+backend/static/branding/
+
+# ── Docker ──────────────────────────────────────
+# No ignorar docker-compose.yml (es parte del proyecto)
+
+# ── IDEs ────────────────────────────────────────
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# ── Alembic (no ignorar versions/) ──────────────
+# alembic/versions/ se versiona intencionalmente
+
+# ── Logs ────────────────────────────────────────
+*.log
+logs/
