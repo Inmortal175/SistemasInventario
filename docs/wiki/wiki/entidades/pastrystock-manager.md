@@ -23,6 +23,7 @@ arquitectura limpia por capas (domain / infrastructure / application / api / cor
 - [[fuentes/sesion-ajustes-branding-y-paginacion]] — configurabilidad, branding y paginación
 - [[fuentes/sesion-formalizacion-sdd-spec-kit]] — evidencia formal de SDD en `docs/spec/`
 - [[fuentes/sesion-produccion-registro-y-producto-terminado]] — HU-17: producto terminado + registro de producción
+- [[fuentes/sesion-despliegue-railway-csrf-y-contrasenas]] — puesta en producción en Railway (backend y frontend con dominio público)
 
 ## Relaciones
 - [[entidades/backend-pastrystock]] — capa de API y lógica de negocio

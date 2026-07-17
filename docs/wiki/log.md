@@ -213,3 +213,15 @@
 - Migración aplicada a dev y pastry_test (setup_test_db.py); conftest _TABLES incluye la tabla hija
 - Concepto actualizado: produccion-bom-transaccion-atomica
 - 43 páginas en total (sin páginas nuevas)
+
+## [2026-07-17] ingest | Sesión: despliegue en Railway, auditoría CSRF y visibilidad de contraseñas
+- Fuente creada: fuentes/sesion-despliegue-railway-csrf-y-contrasenas
+- Conceptos nuevos (6): despliegue-en-paas-vs-docker-compose, enums-postgres-alembic-vs-init-sql,
+  arranque-de-contenedor-y-healthcheck, proteccion-csrf-bearer-vs-cookies,
+  reproducir-el-contenedor-de-produccion-en-local, campo-contrasena-con-visibilidad
+- Entidades actualizadas: pastrystock-manager, backend-pastrystock, frontend-nextjs
+- 50 páginas en total
+- Contradicción detectada: el CLAUDE.md raíz aún da init.sql como fuente de verdad de los
+  ENUMs; desde la migración 000 ese papel es de Alembic (anotado en el concepto)
+- Pregunta abierta: causa raíz del cuelgue de Alembic en Railway (T-RW-26), resuelto con un
+  restart de PostgreSQL pero sin confirmar

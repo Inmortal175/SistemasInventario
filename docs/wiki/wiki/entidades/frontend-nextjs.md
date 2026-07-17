@@ -53,6 +53,7 @@ route handlers `api/reports/export`, `api/profile/avatar`, `api/settings/logo` y
 - [[fuentes/sesion-frontend-nextjs-y-seed-admin]] — sesión de construcción inicial
 - [[fuentes/sesion-frontend-modulos-avanzados]] — módulos avanzados (HU-08/10/11/12/13/14/15/16)
 - [[fuentes/sesion-ajustes-branding-y-paginacion]] — ajustes, responsive, paginación
+- [[fuentes/sesion-despliegue-railway-csrf-y-contrasenas]] — desplegado en Railway; `PasswordInput`; Next 15.1.11 por CVEs
 
 ## Relaciones
 - [[entidades/pastrystock-manager]] — proyecto contenedor

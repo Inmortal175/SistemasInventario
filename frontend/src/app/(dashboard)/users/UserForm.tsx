@@ -4,6 +4,7 @@ import { useActionState } from "react";
 
 import { createUserAction } from "@/app/actions/users";
 import { FormMessage } from "@/components/FormMessage";
+import { PasswordInput } from "@/components/PasswordInput";
 import { SubmitButton } from "@/components/SubmitButton";
 import { IDLE } from "@/lib/form";
 import { ROLE_LABELS } from "@/lib/labels";
@@ -26,7 +27,7 @@ export function UserForm() {
       </div>
       <div>
         <label htmlFor="password" className="label">Contraseña</label>
-        <input id="password" name="password" type="password" required minLength={8} className="input" placeholder="Mínimo 8 caracteres" />
+        <PasswordInput id="password" name="password" autoComplete="new-password" required minLength={8} placeholder="Mínimo 8 caracteres" />
       </div>
       <div>
         <label htmlFor="role" className="label">Rol</label>

@@ -35,8 +35,11 @@ core/          → Config (pydantic-settings), security (JWT)
 5. Creación de categorías: Redis se consulta primero (cache-first), PostgreSQL como fallback.
 
 ## ENUMs de dominio
-Definidos en `backend/sql/init.sql` (ejecutado en primer boot de PostgreSQL) y
-referenciados en SQLAlchemy con `create_type=False` para evitar duplicados.
+Los crea la migración `000_create_enums.py` (raíz de la cadena de Alembic), de forma
+idempotente. Las migraciones los referencian con `create_type=False` para no duplicarlos.
+`backend/sql/init.sql` los crea también en el primer boot de PostgreSQL vía docker-compose,
+pero es un atajo redundante: la fuente de verdad del esquema es Alembic. Un PostgreSQL
+gestionado (Railway) nunca ejecuta ese script.
 
 ## Variables de entorno
 Ver `.env.example`. Las principales: `DATABASE_URL`, `REDIS_URL`, `SECRET_KEY`.

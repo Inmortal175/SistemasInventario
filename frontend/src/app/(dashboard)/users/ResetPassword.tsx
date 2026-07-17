@@ -4,6 +4,7 @@ import { useActionState, useState } from "react";
 
 import { resetPasswordAction } from "@/app/actions/users";
 import { FormMessage } from "@/components/FormMessage";
+import { PasswordInput } from "@/components/PasswordInput";
 import { SubmitButton } from "@/components/SubmitButton";
 import { IDLE } from "@/lib/form";
 
@@ -26,9 +27,9 @@ export function ResetPassword({ userId }: { userId: string }) {
 
   return (
     <form action={formAction} className="flex flex-col gap-2">
-      <input
+      <PasswordInput
         name="new_password"
-        type="password"
+        autoComplete="new-password"
         required
         minLength={8}
         placeholder="Nueva contraseña"

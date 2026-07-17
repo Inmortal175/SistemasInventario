@@ -24,6 +24,8 @@ import {
   faXmark,
   faGear,
   faImage,
+  faEye,
+  faEyeSlash,
 } from "@fortawesome/free-solid-svg-icons";
 
 import "@fortawesome/fontawesome-svg-core/styles.css";
@@ -59,6 +61,8 @@ export const ICONS = {
   close: faXmark,
   settings: faGear,
   image: faImage,
+  eye: faEye,
+  eyeSlash: faEyeSlash,
 } as const;
 
 export type IconName = keyof typeof ICONS;

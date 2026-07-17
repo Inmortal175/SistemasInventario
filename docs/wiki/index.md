@@ -1,8 +1,8 @@
 # Índice de la Wiki
 
-Última actualización: 2026-07-15 | Total páginas: 43
+Última actualización: 2026-07-17 | Total páginas: 50
 
-## Fuentes (10)
+## Fuentes (11)
 | Página | Resumen | Fecha | Tags |
 |--------|---------|-------|------|
 | [[fuentes/sesion-frontend-nextjs-y-seed-admin]] | Construcción del frontend Next.js 15 y del seed de admin | 2026-07-08 | frontend, nextjs, autenticacion, seed |
@@ -15,6 +15,7 @@
 | [[fuentes/sesion-formalizacion-sdd-spec-kit]] | Evidencia formal de SDD (Spec Kit) en docs/spec/: constitución, análisis, plan, 71 tareas y trazabilidad | 2026-07-10 | sdd, spec-kit, metodologia, ciclo-de-vida, trazabilidad |
 | [[fuentes/sesion-produccion-registro-y-producto-terminado]] | HU-17: producto terminado como inventario + registro inmutable de cada producción; suite 121 verde | 2026-07-10 | hu-17, produccion, producto-terminado, migracion, tests |
 | [[fuentes/sesion-refinamientos-ux-auditoria-y-olap]] | Auto-crear producto desde receta + sección propia; auditoría legible en español; OLAP con costos y tipo | 2026-07-11 | hu-17, hu-12, hu-10, auditoria, ux, olap |
+| [[fuentes/sesion-despliegue-railway-csrf-y-contrasenas]] | Puesta en producción en Railway tras 7 fallos encadenados; auditoría CSRF; ojito en contraseñas | 2026-07-17 | despliegue, railway, alembic, docker, seguridad, csrf, ux, cve |
 
 ## Entidades (5)
 | Página | Tipo | Aparece en |
@@ -25,7 +26,7 @@
 | [[entidades/script-seed-admin]] | herramienta | sesion-frontend-nextjs-y-seed-admin |
 | [[entidades/script-seed-demo]] | herramienta | sesion-ajustes-branding-y-paginacion |
 
-## Conceptos (28)
+## Conceptos (34)
 | Página | Resumen breve | Fuentes |
 |--------|--------------|---------|
 | [[conceptos/producto-terminado-y-registro-de-produccion]] | Producto terminado como inventario + corridas inmutables (HU-17) | 1 |
@@ -56,6 +57,12 @@
 | [[conceptos/hot-reload-docker-windows]] | inotify no funciona en bind-mounts: `WATCHPACK_POLLING` | 1 |
 | [[conceptos/cache-obsoleta-tras-cambio-de-schema]] | Una entrada de Redis vieja puede devolver 500 tras migrar | 1 |
 | [[conceptos/cobertura-y-greenlet-sqlalchemy]] | coverage.py deja de trazar tras el primer await a la BD | 1 |
+| [[conceptos/despliegue-en-paas-vs-docker-compose]] | Lo que compose hacía por ti y en un PaaS no hace nadie | 1 |
+| [[conceptos/enums-postgres-alembic-vs-init-sql]] | El esquema entero debe vivir en Alembic, no en init.sql | 1 |
+| [[conceptos/arranque-de-contenedor-y-healthcheck]] | Las migraciones no deben poder bloquear el arranque | 1 |
+| [[conceptos/proteccion-csrf-bearer-vs-cookies]] | La superficie CSRF está donde vive la cookie | 1 |
+| [[conceptos/reproducir-el-contenedor-de-produccion-en-local]] | Depurar el despliegue en segundos, no en ciclos de 5 min | 1 |
+| [[conceptos/campo-contrasena-con-visibilidad]] | El "ojito": un componente, seis campos, accesible | 1 |
 
 ## Síntesis (0)
 | Página | Origen | Fecha |

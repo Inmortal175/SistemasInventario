@@ -195,21 +195,44 @@
 |---|---|---|---|---|---|
 | T-RW-01 | `backend/Dockerfile` de producción (gunicorn + workers uvicorn, bind a `$PORT`) | Despliegue | — | T-DEP-04 | ✅ |
 | T-RW-02 | `frontend/Dockerfile` (build standalone, `HOSTNAME=0.0.0.0`, `ARG NEXT_PUBLIC_API_URL`) | Despliegue | — | T-DEP-04 | ✅ |
-| T-RW-03 | `backend/railway.json`: builder DOCKERFILE, `startCommand` (migraciones→seeds→gunicorn), healthcheck `/health` | Despliegue | — | T-RW-01 | ✅ |
+| T-RW-03 | `backend/railway.json`: builder DOCKERFILE, `startCommand` → `sh start.sh`, healthcheck `/health` | Despliegue | — | T-RW-01 | ✅ |
 | T-RW-04 | `frontend/railway.json`: builder DOCKERFILE + política de reinicio | Despliegue | — | T-RW-02 | ✅ |
 | T-RW-05 | Redactar guía de despliegue → `deployment-railway.md` | Despliegue | — | T-RW-03, T-RW-04 | ✅ |
 | T-RW-06 | Verificar que `.gitignore` excluye `.env` y secretos antes de publicar (solo `.env.example` rastreado) | Despliegue | — | — | ✅ |
-| T-RW-07 | Publicar el repositorio en GitHub (rama `main`) | Despliegue | — | T-RW-06 | ⬜ |
-| T-RW-08 | Crear proyecto en Railway + plugins PostgreSQL y Redis | Despliegue | — | T-RW-07 | ⬜ |
-| T-RW-09 | Servicio `backend` conectado al repo (Root Directory = `backend`, auto-deploy en push) | Despliegue | — | T-RW-08 | ⬜ |
-| T-RW-10 | Variables del backend: `DATABASE_URL`/`REDIS_URL` por *reference variables*, `SECRET_KEY`, `ENVIRONMENT`, `SUPERADMIN_*` | Despliegue | HU-04 | T-RW-09 | ⬜ |
-| T-RW-11 | Generar dominio público del backend (Networking → Generate Domain) | Despliegue | — | T-RW-10 | ⬜ |
-| T-RW-12 | Servicio `frontend` (Root Directory = `frontend`) + `NEXT_PUBLIC_API_URL`/`INTERNAL_API_URL` + dominio | Despliegue | — | T-RW-11 | ⬜ |
-| T-RW-13 | Cerrar `CORS_ORIGINS` del backend con el dominio real del frontend (redeploy) | Despliegue | — | T-RW-12 | ⬜ |
-| T-RW-14 | Decidir si `seed_demo.py` permanece en el `startCommand` del entorno productivo | Despliegue | — | T-RW-10 | ⬜ |
-| T-RW-15 | Verificar en logs: migraciones `001→008` aplicadas y seeds idempotentes ejecutados | Pruebas | — | T-RW-13 | ⬜ |
-| T-RW-16 | Ejecutar checklist post-despliegue: `/health`, `/docs`, login, categoría 201 (Redis), toast por WebSocket, export CSV | Pruebas | HU-01,04,12,14 | T-RW-15 | ⬜ |
-| T-RW-17 | Registrar la sesión de despliegue en la wiki (`docs/wiki/`) | Transversal | — | T-RW-16 | ⬜ |
+| T-RW-07 | Publicar el repositorio en GitHub (rama `main`) | Despliegue | — | T-RW-06 | ✅ |
+| T-RW-08 | Crear proyecto en Railway + plugins PostgreSQL y Redis | Despliegue | — | T-RW-07 | ✅ |
+| T-RW-09 | Servicio `backend` conectado al repo (Root Directory = `backend`, auto-deploy en push) | Despliegue | — | T-RW-08 | ✅ |
+| T-RW-10 | Variables del backend: `DATABASE_URL` (con `+asyncpg`), `SECRET_KEY`, `ENVIRONMENT`, `SUPERADMIN_*` | Despliegue | HU-04 | T-RW-09 | ✅ |
+| T-RW-11 | Generar dominio público del backend (Networking → Generate Domain) | Despliegue | — | T-RW-10 | ✅ |
+| T-RW-12 | Servicio `frontend` (Root Directory = `frontend`) + `NEXT_PUBLIC_API_URL`/`INTERNAL_API_URL` + dominio | Despliegue | — | T-RW-11 | ✅ |
+| T-RW-13 | Cerrar `CORS_ORIGINS` del backend con el dominio real del frontend (redeploy) | Despliegue | — | T-RW-12 | ✅ |
+| T-RW-14 | Decidir si `seed_demo.py` permanece en el `startCommand` del entorno productivo | Despliegue | — | T-RW-10 | ✅ |
+| T-RW-15 | Verificar en logs: migraciones `000→008` aplicadas y arranque de gunicorn | Pruebas | — | T-RW-13 | ✅ |
+| T-RW-16 | Ejecutar checklist post-despliegue: `/health`, `/docs`, login, categoría 201 (Redis), toast por WebSocket, export CSV | Pruebas | HU-01,04,12,14 | T-RW-23 | ⬜ |
+| T-RW-17 | Registrar la sesión de despliegue en la wiki (`docs/wiki/`) | Transversal | — | T-RW-16 | ✅ |
+| T-RW-18 | Migración `000`: crear los ENUMs desde Alembic (`init.sql` no corre en PostgreSQL gestionado) | Despliegue | — | T-RW-08 | ✅ |
+| T-RW-19 | `static/` creado con permisos de `appuser` en el Dockerfile (está en `.gitignore`, no viaja al build) | Despliegue | HU-16 | T-RW-01 | ✅ |
+| T-RW-20 | `CORS_ORIGINS` leído como texto: `list[str]` rompía el arranque por el json.loads de pydantic-settings | Despliegue | — | T-RW-13 | ✅ |
+| T-RW-21 | `start.sh`: migraciones con `timeout` y arranque desacoplado (Alembic no puede secuestrar el healthcheck) | Despliegue | — | T-RW-03 | ✅ |
+| T-RW-22 | Subir `next` a 15.1.11: Railway bloquea el build por CVE-2025-66478 (CRITICAL) y 3 más | Despliegue | — | T-RW-12 | ✅ |
+| T-RW-23 | `REDIS_URL` válida en el backend (bloquea el login: `AuthService` depende de Redis) | Despliegue | HU-04 | T-RW-08 | ⬜ |
+| T-RW-24 | Montar Volume en `/app/static`: el FS de Railway es efímero, los avatares no sobreviven al redeploy | Despliegue | HU-16 | T-RW-19 | ⬜ |
+| T-RW-25 | Resolver la carrera del seed de superadmin entre los workers de gunicorn (`UniqueViolationError` en cada arranque) | Implementación | HU-04 | T-RW-15 | ⬜ |
+| T-RW-26 | Investigar el cuelgue de Alembic en Railway (se resolvió reiniciando PostgreSQL; causa raíz sin confirmar) | Pruebas | — | T-RW-21 | ⬜ |
+
+---
+
+## Bloque 16 — UX de contraseñas y auditoría CSRF
+
+> Sesión posterior al despliegue. La visibilidad de contraseña es una petición directa de usuario;
+> la auditoría CSRF documenta una postura de seguridad que ya existía pero no estaba escrita.
+
+| ID | Tarea | Fase | HU | Depende | Estado |
+|---|---|---|---|---|---|
+| T-UX-01 | Componente `PasswordInput` con botón de revelar/ocultar (accesible: `aria-label` + `aria-pressed`) | Implementación | HU-04 | — | ✅ |
+| T-UX-02 | Aplicar `PasswordInput` en los 6 campos: login, alta de usuario, reset de contraseña, cambio de contraseña (×3) | Implementación | HU-04, HU-10 | T-UX-01 | ✅ |
+| T-SEC-01 | Auditar la protección CSRF de la autenticación | Pruebas | HU-04 | — | ✅ |
+| T-SEC-02 | Validación explícita de `Origin` en los 3 route handlers POST (defensa en profundidad, opcional) | Implementación | HU-04 | T-SEC-01 | ⬜ |
 
 ---
 
@@ -232,10 +255,14 @@
 | 12 Documentación | 3 | 2 | Transversal |
 | 13 Producto terminado (HU-17) | 9 | 9 | Impl→Pruebas |
 | 14 Refinamientos UX/datos | 5 | 5 | Implementación |
-| 15 Despliegue en Railway | 17 | 6 | Despliegue |
-| **Total** | **102** | **90** | — |
+| 15 Despliegue en Railway | 26 | 22 | Despliegue |
+| 16 UX contraseñas / CSRF | 4 | 3 | Impl→Pruebas |
+| **Total** | **115** | **109** | — |
 
-> **Pendientes:** el Bloque 15 (despliegue en Railway) tiene la preparación hecha (Dockerfiles,
-> `railway.json`, guía, `.gitignore` auditado) y las 11 tareas de ejecución abiertas — se cierran
-> conforme se realiza el despliegue. T-DOC-03 (informe final) queda al final, ya que consume el resto de artefactos como
-> anexos e incluirá la URL pública del sistema desplegado.
+> **Pendientes:** el sistema está desplegado y sirviendo en Railway (backend y frontend con dominio
+> público, migraciones `000→008` aplicadas). El login todavía devuelve 500 por **T-RW-23**:
+> `REDIS_URL` no tiene un valor válido y `AuthService` recibe Redis como dependencia obligatoria.
+> Cerrada esa tarea se puede ejecutar el checklist **T-RW-16**. Quedan además el Volume para los
+> estáticos (T-RW-24), la carrera del seed entre workers (T-RW-25) y la causa raíz del cuelgue de
+> Alembic (T-RW-26). T-DOC-03 (informe final) queda al final, ya que consume el resto de artefactos
+> como anexos e incluirá la URL pública del sistema desplegado.

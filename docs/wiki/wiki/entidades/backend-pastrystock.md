@@ -47,6 +47,7 @@ Redis 7 y PostgreSQL 16, organizada en arquitectura limpia por capas
 - [[fuentes/sesion-backend-completo-16-hu]] — sesión que completó el backend
 - [[fuentes/sesion-frontend-nextjs-y-seed-admin]] — consumido por el frontend
 - [[fuentes/sesion-ajustes-branding-y-paginacion]] — settings, uploads, paginación de auditoría
+- [[fuentes/sesion-despliegue-railway-csrf-y-contrasenas]] — desplegado en Railway: migración `000`, `start.sh`, auditoría CSRF
 
 ## Relaciones
 - [[entidades/pastrystock-manager]] — proyecto contenedor
