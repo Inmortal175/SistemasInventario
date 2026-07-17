@@ -43,8 +43,13 @@ FROM deps-prod AS production
 
 COPY . .
 
-# Crear usuario no-root para producción
-RUN addgroup --system appgroup && adduser --system --ingroup appgroup appuser
+# Crear usuario no-root para producción.
+# static/ está en .gitignore, así que no llega en el contexto de build: hay que
+# crearlo aquí. Sin el chown, el mkdir de create_app() y las subidas de avatares
+# fallarían con EACCES, porque /app pertenece a root y el proceso corre sin él.
+RUN addgroup --system appgroup && adduser --system --ingroup appgroup appuser \
+    && mkdir -p /app/static/avatars /app/static/branding \
+    && chown -R appuser:appgroup /app/static
 USER appuser
 
 EXPOSE 8000
