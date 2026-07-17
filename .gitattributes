@@ -1,0 +1,7 @@
+# Los scripts de shell deben viajar con LF: un CRLF los rompe dentro del
+# contenedor Linux con un `\r` invisible ("no such file or directory").
+*.sh text eol=lf
+
+# Igual para lo que ejecuta o interpreta el contenedor.
+Dockerfile text eol=lf
+*.dockerfile text eol=lf
