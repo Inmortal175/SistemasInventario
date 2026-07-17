@@ -1,7 +1,8 @@
+import json
 from functools import lru_cache
 from typing import Literal
 
-from pydantic import AnyHttpUrl, Field, field_validator
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -48,15 +49,21 @@ class Settings(BaseSettings):
     access_token_expire_minutes: int = 60
 
     # ── CORS ─────────────────────────────────────────────────────────────────
-    cors_origins: list[str] = ["http://localhost:3000"]
+    # Se lee como texto, no como `list[str]`: pydantic-settings trata las listas
+    # como tipo complejo y les aplica json.loads en la propia fuente de entorno,
+    # antes de que corra cualquier validador. Un valor sin corchetes abortaba el
+    # arranque con un SettingsError opaco, difícil de diagnosticar en un PaaS.
+    cors_origins: str = "http://localhost:3000"
 
-    @field_validator("cors_origins", mode="before")
-    @classmethod
-    def parse_cors(cls, v: str | list[str]) -> list[str]:
-        if isinstance(v, str):
-            import json
-            return json.loads(v)
-        return v
+    @property
+    def cors_origins_list(self) -> list[str]:
+        """Orígenes permitidos. Acepta JSON (`["a","b"]`) o CSV (`a,b`)."""
+        raw = self.cors_origins.strip()
+        if not raw:
+            return []
+        if raw.startswith("["):
+            return [str(origin).strip() for origin in json.loads(raw)]
+        return [origin.strip() for origin in raw.split(",") if origin.strip()]
 
     # ── Seed Superadmin ──────────────────────────────────────────────────────
     superadmin_email: str = "admin@pastry.local"
