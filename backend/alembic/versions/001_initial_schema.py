@@ -1,19 +1,18 @@
 """001 initial schema
 
 Revision ID: 001
-Revises:
+Revises: 000
 Create Date: 2026-07-07
 
 Crea todas las tablas del MVP con sus constraints e índices de rendimiento.
-Los ENUMs se crean previamente en sql/init.sql para que PostgreSQL los tenga
-disponibles antes de que Alembic ejecute este script.
+Los ENUMs los crea la migración 000, que debe correr antes que este script.
 """
 from alembic import op
 import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 revision = "001"
-down_revision = None
+down_revision = "000"
 branch_labels = None
 depends_on = None
 
