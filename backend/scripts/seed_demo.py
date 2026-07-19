@@ -29,6 +29,7 @@ from sqlalchemy import select  # noqa: E402
 
 from app.core.config import get_settings  # noqa: E402
 from app.domain.enums import ItemType, LocationType, MovementType, UnitMeasure  # noqa: E402
+from app.infrastructure.cache.redis_client import close_redis, get_redis  # noqa: E402
 from app.infrastructure.database.connection import AsyncSessionLocal, engine  # noqa: E402
 from app.infrastructure.database.models.batch_model import SupplyBatchModel  # noqa: E402
 from app.infrastructure.database.models.category_model import CategoryModel  # noqa: E402
@@ -628,6 +629,30 @@ async def _seed_movements(
     return written + 1
 
 
+# Cachés cache-first que la app sirve sin tocar Postgres. El seed escribe directo
+# a la DB, así que hay que invalidarlas o el frontend seguiría mostrando lo viejo
+# (típicamente listas vacías cacheadas antes de sembrar).
+_CACHE_PATTERNS = [
+    "categories:*",
+    "category:*",
+    "supplies:page:*",
+    "dashboard:kpis",
+]
+
+
+async def _invalidate_cache() -> int:
+    redis = await get_redis()
+    deleted = 0
+    for pattern in _CACHE_PATTERNS:
+        if "*" in pattern:
+            keys = [key async for key in redis.scan_iter(match=pattern, count=500)]
+            if keys:
+                deleted += await redis.delete(*keys)
+        else:
+            deleted += await redis.delete(pattern)
+    return deleted
+
+
 async def seed(cakes: int) -> int:
     async with AsyncSessionLocal() as session:
         actor = await _resolve_actor(session)
@@ -649,6 +674,8 @@ async def seed(cakes: int) -> int:
         )
         await session.commit()
 
+    cache_deleted = await _invalidate_cache()
+
     print(
         f"✅ Datos de simulación listos (actor: {actor.email})\n"
         f"   categorías:  {len(categories) + 1}\n"
@@ -657,7 +684,8 @@ async def seed(cakes: int) -> int:
         f"   recetas:     2 ({recipe.name} + {product_recipe.name} → produce terminado)\n"
         f"   productos:   {product.name} ({product_units} bandejas en stock)\n"
         f"   producción:  {cakes} tortas + {product_units} bandejas, con lista de preparación\n"
-        f"   movimientos: {movements} nuevos (tortas + merma)"
+        f"   movimientos: {movements} nuevos (tortas + merma)\n"
+        f"   caché:       {cache_deleted} llaves de Redis invalidadas"
     )
     return 0
 
@@ -676,6 +704,7 @@ async def main() -> int:
     try:
         return await seed(args.cakes)
     finally:
+        await close_redis()
         await engine.dispose()
 
 
