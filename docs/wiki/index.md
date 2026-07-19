@@ -1,8 +1,8 @@
 # Índice de la Wiki
 
-Última actualización: 2026-07-17 | Total páginas: 50
+Última actualización: 2026-07-19 | Total páginas: 54
 
-## Fuentes (11)
+## Fuentes (12)
 | Página | Resumen | Fecha | Tags |
 |--------|---------|-------|------|
 | [[fuentes/sesion-frontend-nextjs-y-seed-admin]] | Construcción del frontend Next.js 15 y del seed de admin | 2026-07-08 | frontend, nextjs, autenticacion, seed |
@@ -16,17 +16,19 @@
 | [[fuentes/sesion-produccion-registro-y-producto-terminado]] | HU-17: producto terminado como inventario + registro inmutable de cada producción; suite 121 verde | 2026-07-10 | hu-17, produccion, producto-terminado, migracion, tests |
 | [[fuentes/sesion-refinamientos-ux-auditoria-y-olap]] | Auto-crear producto desde receta + sección propia; auditoría legible en español; OLAP con costos y tipo | 2026-07-11 | hu-17, hu-12, hu-10, auditoria, ux, olap |
 | [[fuentes/sesion-despliegue-railway-csrf-y-contrasenas]] | Puesta en producción en Railway tras 7 fallos encadenados; auditoría CSRF; ojito en contraseñas | 2026-07-17 | despliegue, railway, alembic, docker, seguridad, csrf, ux, cve |
+| [[fuentes/sesion-reset-sistema-y-cache-first-seed]] | Reset del sistema + seed que invalida caché; el 502 de Railway era Target Port, no código | 2026-07-19 | railway, redis, cache-first, seed, reset, operaciones |
 
-## Entidades (5)
+## Entidades (6)
 | Página | Tipo | Aparece en |
 |--------|------|-----------|
 | [[entidades/pastrystock-manager]] | proyecto | sesion-frontend-nextjs-y-seed-admin, sesion-backend-completo-16-hu, sesion-ajustes-branding-y-paginacion |
 | [[entidades/backend-pastrystock]] | modulo | sesion-backend-completo-16-hu, sesion-ajustes-branding-y-paginacion |
 | [[entidades/frontend-nextjs]] | modulo | sesion-frontend-nextjs-y-seed-admin, sesion-ajustes-branding-y-paginacion |
 | [[entidades/script-seed-admin]] | herramienta | sesion-frontend-nextjs-y-seed-admin |
-| [[entidades/script-seed-demo]] | herramienta | sesion-ajustes-branding-y-paginacion |
+| [[entidades/script-seed-demo]] | herramienta | sesion-ajustes-branding-y-paginacion, sesion-reset-sistema-y-cache-first-seed |
+| [[entidades/script-reset-system]] | herramienta | sesion-reset-sistema-y-cache-first-seed |
 
-## Conceptos (34)
+## Conceptos (36)
 | Página | Resumen breve | Fuentes |
 |--------|--------------|---------|
 | [[conceptos/producto-terminado-y-registro-de-produccion]] | Producto terminado como inventario + corridas inmutables (HU-17) | 1 |
@@ -63,6 +65,8 @@
 | [[conceptos/proteccion-csrf-bearer-vs-cookies]] | La superficie CSRF está donde vive la cookie | 1 |
 | [[conceptos/reproducir-el-contenedor-de-produccion-en-local]] | Depurar el despliegue en segundos, no en ciclos de 5 min | 1 |
 | [[conceptos/campo-contrasena-con-visibilidad]] | El "ojito": un componente, seis campos, accesible | 1 |
+| [[conceptos/invalidacion-cache-al-sembrar-directo-a-db]] | Escribir directo a la DB obliga a invalidar las llaves cache-first | 1 |
+| [[conceptos/railway-target-port-vs-port-escucha]] | 502 Bad Gateway: el Target Port debe coincidir con el puerto de escucha | 1 |
 
 ## Síntesis (0)
 | Página | Origen | Fecha |

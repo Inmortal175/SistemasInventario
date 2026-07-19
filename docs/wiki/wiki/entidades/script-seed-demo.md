@@ -36,20 +36,30 @@ docker-compose exec backend python scripts/seed_demo.py --cakes 3
 
 ## Notas de diseño
 - No borra nada: `movement_history` es inmutable por diseño, así que el script no ofrece
-  `--reset`.
+  `--reset`. Para limpiar la base existe el script aparte [[entidades/script-reset-system]].
 - Replica el FIFO de `ProductionService` en una función local (`_consume_fifo`) en vez de
   instanciar el servicio completo con Redis y alertas.
-- Escribe directo en PostgreSQL, así que tras correrlo conviene invalidar las claves Redis
-  `categories:active:all`, `supplies:page:*` y `dashboard:kpis`.
+- **Invalida la caché al terminar** (`_invalidate_cache`, desde 2026-07-19): borra
+  `categories:*`, `category:*`, `supplies:page:*` y `dashboard:kpis`. Antes esto se dejaba al
+  operador y era la causa de que "sembré pero el frontend sigue vacío". Ver
+  [[conceptos/invalidacion-cache-al-sembrar-directo-a-db]].
 - Los `icon_name` de las categorías deben pertenecer a la lista blanca del backend
   (ver [[conceptos/iconos-fontawesome-nextjs]]).
 
+## Segunda receta con producto terminado
+Además de la *Torta de Chocolate*, siembra la receta **Brownie de Chocolate** que sí produce un
+producto terminado (`ItemType.FINISHED_PRODUCT`), con 3 bandejas ya fabricadas (lote,
+vencimiento, descuento FIFO y corridas de producción). Así la sección de Productos tiene datos
+reales. Ver [[conceptos/producto-terminado-y-registro-de-produccion]].
+
 ## Aparece en
 - [[fuentes/sesion-ajustes-branding-y-paginacion]] — creación y verificación
+- [[fuentes/sesion-reset-sistema-y-cache-first-seed]] — invalidación de caché añadida
 
 ## Relaciones
 - [[entidades/backend-pastrystock]] — usa sus modelos y repositorios
 - [[entidades/script-seed-admin]] — requisito previo (debe existir un usuario)
+- [[entidades/script-reset-system]] — se corre antes para partir de una base limpia
 - Aplica [[conceptos/fifo-lotes-vencimiento]] y [[conceptos/seed-idempotente]]
 
 ## Notas

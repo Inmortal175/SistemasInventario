@@ -225,3 +225,13 @@
   ENUMs; desde la migración 000 ese papel es de Alembic (anotado en el concepto)
 - Pregunta abierta: causa raíz del cuelgue de Alembic en Railway (T-RW-26), resuelto con un
   restart de PostgreSQL pero sin confirmar
+
+## [2026-07-19] ingest | Sesión: reset del sistema y cache-first en el seed (Railway)
+- Fuente creada: fuentes/sesion-reset-sistema-y-cache-first-seed
+- Entidad nueva: script-reset-system (backend/scripts/reset_system.py)
+- Entidad actualizada: script-seed-demo (ahora invalida caché; 2ª receta con producto terminado)
+- Conceptos nuevos (2): invalidacion-cache-al-sembrar-directo-a-db, railway-target-port-vs-port-escucha
+- 54 páginas en total
+- Insight central: el seed escribía directo a Postgres sin invalidar Redis; el frontend servía
+  listas vacías cacheadas antes de sembrar. Refuerza cache-obsoleta-tras-cambio-de-schema.
+- Commit del código: 8ea052d en main
